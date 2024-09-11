@@ -1,0 +1,16 @@
+<div class="image-preview">
+    <h3>Image Preview</h3>
+  
+    <!-- Loading Spinner while the image is loading -->
+    <mat-progress-spinner *ngIf="loading" mode="indeterminate"></mat-progress-spinner>
+  
+    <!-- Image Preview with load event listener -->
+    <img 
+      style="max-width: 400px;" 
+      [src]="imageUrl" 
+      alt="Image preview" 
+      (load)="onImageLoad()"
+      *ngIf="imageUrl"
+    >
+  </div>
+  

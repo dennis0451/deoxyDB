@@ -1,0 +1,23 @@
+<h2>Upload Files</h2>
+<section>
+  <div class="example-label">Raised</div>
+  <div class="example-button-row">
+    <button mat-raised-button>Basic</button>
+    <button mat-raised-button disabled>Disabled</button>
+    <a mat-raised-button href="https://www.google.com/" target="_blank">Link</a>
+  </div>
+</section>
+<form (submit)="onSubmit($event)">
+  <div class="file-input-container">
+    <label for="file-upload" class="custom-file-label">Select Files</label>
+    <input id="file-upload" class="upload-button" type="file" (change)="onFileSelected($event)" multiple>
+  </div>
+  <!-- <button mat-raised-button>Basi</button> -->
+  
+  <button mat-raised-button color="primary" type="submit">Upload</button>
+</form>
+<!-- Display the first 26 characters of the DNA sequence -->
+<div *ngIf="dnaSequence">
+  <h3>First 26 Characters of DNA Sequence:</h3>
+  <p>{{ dnaSequence }}</p>
+</div>

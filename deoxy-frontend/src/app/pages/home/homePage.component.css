@@ -1,0 +1,45 @@
+.homepage-container {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .hero {
+    background-color: #e0f7fa;
+    padding: 3rem 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .features {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 3rem;
+  }
+  
+  .feature-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 1.5rem;
+    width: 30%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-card p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  

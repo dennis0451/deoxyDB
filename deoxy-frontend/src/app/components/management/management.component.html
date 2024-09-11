@@ -1,0 +1,40 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  
+  <!-- File ID Column (Not Editable) -->
+  <ng-container matColumnDef="file_id">
+    <th mat-header-cell *matHeaderCellDef> File ID </th>
+    <td mat-cell *matCellDef="let row"> {{row.file_id}} </td>
+  </ng-container>
+
+  <!-- File Name Column (Editable) -->
+  <ng-container matColumnDef="file_name">
+    <th mat-header-cell *matHeaderCellDef> File Name </th>
+    <td mat-cell *matCellDef="let row">
+      <input *ngIf="editingRows[row.file_id]" [(ngModel)]="row.file_name">
+      <span *ngIf="!editingRows[row.file_id]">{{ row.file_name }}</span>
+    </td>
+  </ng-container>
+
+  <!-- DNA Sequence Column (Not Editable) -->
+  <ng-container matColumnDef="dna_sequence">
+    <th mat-header-cell *matHeaderCellDef> DNA Sequence </th>
+    <td mat-cell *matCellDef="let row">
+      <span>{{ row.dna_sequence }}</span> <!-- Display DNA sequence as read-only -->
+    </td>
+  </ng-container>
+
+  <!-- Actions Column (Edit/Save) -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Actions </th>
+    <td mat-cell *matCellDef="let row">
+      <button mat-button color="primary" *ngIf="!editingRows[row.file_id]" (click)="editRow(row.file_id)">Edit</button>
+      <button mat-button color="accent" *ngIf="editingRows[row.file_id]" (click)="saveRow(row)">Save</button>
+      <button mat-button color="primary" (click)="previewImage(row.file_id)">Preview</button>
+      <button mat-button color="primary" (click)="downloadFile(row.file_id)">Download</button>
+    </td>
+  </ng-container>
+
+  <!-- Header and Row Declarations -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

@@ -1,0 +1,29 @@
+<div class="homepage-container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Welcome to DeoxyDB</h1>
+      <p>Preserve your data for the future using advanced DNA sequence technology.</p>
+      <button mat-raised-button color="primary" (click)="navigateTo('upload')">Upload Files</button>
+    </section>
+  
+    <!-- Features Section -->
+    <section class="features">
+      <h2>What You Can Do</h2>
+      <div class="feature-card">
+        <h3>Upload Your Files</h3>
+        <p>Upload images and videos, convert them into DNA sequences for long-term storage.</p>
+        <button mat-button color="accent" (click)="navigateTo('upload')">Start Uploading</button>
+      </div>
+      <div class="feature-card">
+        <h3>Manage Your Files</h3>
+        <p>View and manage the DNA sequences and their corresponding files.</p>
+        <button mat-button color="accent" (click)="navigateTo('management')">Manage Files</button>
+      </div>
+      <div class="feature-card">
+        <h3>Preview Stored Files</h3>
+        <p>Preview the stored DNA sequences and regenerate the original files from the sequences.</p>
+        <button mat-button color="accent" (click)="navigateTo('preview')">Preview Files</button>
+      </div>
+    </section>
+  </div>
+  
