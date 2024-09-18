@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { FileService } from '../../services/file.service'; // Import the FileService
+import { FileService } from '../../services/file.service'; // Use FileService
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
-
+import { AuthService } from '../../services/auth.service'; // Import AuthService
 
 @Component({
   selector: 'app-upload',
@@ -16,8 +16,19 @@ import { CommonModule } from '@angular/common';
 export class UploadComponent {
   selectedFiles!: FileList;
   dnaSequence!: string;
+  userId!: number; // Store userId
 
-  constructor(private fileService: FileService) {} // Inject FileService
+  constructor(private fileService: FileService, private authService: AuthService) {} // Inject AuthService
+
+  ngOnInit() {
+    // Retrieve user info from AuthService
+    const userInfo = this.authService.getUserInfo();
+    if (userInfo) {
+      this.userId = userInfo.id; // Assuming the id is stored in userInfo object
+    } else {
+      console.error('User is not logged in');
+    }
+  }
 
   onFileSelected(event: any) {
     this.selectedFiles = event.target.files;
@@ -26,12 +37,16 @@ export class UploadComponent {
   onSubmit(event: Event) {
     event.preventDefault();
 
-    if (this.selectedFiles) {
-      this.fileService.uploadFiles(this.selectedFiles).subscribe(response => {
+    if (this.selectedFiles && this.userId) {
+      this.fileService.uploadFiles(this.selectedFiles, this.userId).subscribe(response => {
         console.log('DNA Sequence:', response.dnaSequence); // Log the DNA sequence from the backend
-        //first 26 characters of the DNA sequence
-        this.dnaSequence = (response.dnaSequence as any).dna_sequence.substring(0, 52);
+        // Display the first 52 characters of the DNA sequence
+        // this.dnaSequence = response.dnaSequence.substring(0, 52);
+      }, error => {
+        console.error('Upload failed:', error);
       });
+    } else {
+      console.error('No files selected or user is not logged in');
     }
   }
 }

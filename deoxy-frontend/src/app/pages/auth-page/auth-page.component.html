@@ -1,0 +1,39 @@
+<div class="auth-container">
+    <h2>{{ isLoginMode ? 'Login' : 'Register' }}</h2>
+  
+    <form (ngSubmit)="onSubmit()">
+      <!-- Username Field -->
+      <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input matInput [(ngModel)]="username" name="username" required>
+      </mat-form-field>
+  
+      <!-- Email Field (only for registration) -->
+      <mat-form-field appearance="fill" *ngIf="!isLoginMode">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="email" name="email" required type="email">
+      </mat-form-field>
+  
+      <!-- Password Field -->
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput [(ngModel)]="password" name="password" required type="password">
+      </mat-form-field>
+  
+      <!-- Confirm Password (only for registration) -->
+      <mat-form-field appearance="fill" *ngIf="!isLoginMode">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput [(ngModel)]="confirmPassword" name="confirmPassword" required type="password">
+      </mat-form-field>
+  
+      <!-- Error message -->
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  
+      <!-- Submit Button -->
+      <button mat-raised-button color="primary" type="submit">{{ isLoginMode ? 'Login' : 'Register' }}</button>
+  
+      <!-- Toggle Button -->
+      <button mat-button (click)="toggleAuthMode()">{{ isLoginMode ? 'Need an account? Register' : 'Already have an account? Login' }}</button>
+    </form>
+  </div>
+  

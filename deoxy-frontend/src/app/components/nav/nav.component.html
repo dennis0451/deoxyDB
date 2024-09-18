@@ -1,18 +1,3 @@
-<!-- <mat-toolbar color="primary">
-  <span class="app-name">DeoxyDb</span>
-
-  <span class="spacer"></span>
-
-  <button mat-button [matMenuTriggerFor]="menu">Menu</button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item>Home</button>
-    <button mat-menu-item>Upload</button>
-    <button mat-menu-item>Contact</button>
-  </mat-menu>
-
-  <button mat-button >User</button>
-</mat-toolbar> -->
-
 <mat-toolbar color="primary">
   <span class="app-name">DeoxyDb</span>
 
@@ -21,9 +6,14 @@
   <!-- Menu for navigating between components -->
   <button mat-button [matMenuTriggerFor]="menu">Menu</button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="navigateTo('')">Home</button>
+    <button mat-menu-item (click)="navigateTo('home')">Home</button>
     <button mat-menu-item (click)="navigateTo('upload')">Upload</button>
-    <button mat-menu-item (click)="navigateTo('management')">Management</button>    
+    <button mat-menu-item (click)="navigateTo('management')">Management</button>
   </mat-menu>
 
+  <!-- Spacer to push logout button to the right -->
+  <span class="spacer"></span>
+
+  <!-- Logout button -->
+  <button mat-button (click)="logout()">Logout</button>
 </mat-toolbar>

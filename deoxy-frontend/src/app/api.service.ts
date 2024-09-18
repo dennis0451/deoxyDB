@@ -25,9 +25,19 @@ export class ApiService {
     for (let i = 0; i < files.length; i++) {
       formData.append('file', files[i]); // Append each file to formData
     }
-
-    return this.http.post<{ dnaSequence: string }>(`${this.apiUrl}/upload`, formData);
+  
+    // Get the token from local storage
+    const token = localStorage.getItem('token');
+  console.log('Token:', token);
+  
+    // Include the token in the headers
+    const headers = { 
+      'Authorization': `Bearer ${token}`
+    };
+  
+    return this.http.post<{ dnaSequence: string }>(`${this.apiUrl}/upload`, formData, { headers });
   }
+  
 
   updateDnaSequence(row: any): Observable<any> {
     // Send the updated row (file_name) as the body of the PUT request
@@ -36,9 +46,15 @@ export class ApiService {
   
 
   // Method to fetch DNA sequences
-  getDnaSequences(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/dnasequences`);
-  }
+// Method to fetch DNA sequences based on the userId
+getDnaSequences(userId: number): Observable<any[]> {
+  console.log('Fetching DNA sequences for user:', userId);
+  
+  // Pass the userId as a query parameter
+  return this.http.get<any[]>(`${this.apiUrl}/dnasequences?userId=${userId}`);
+}
+
+  
 
   downloadFile(fileId: number): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/download/${fileId}`, { responseType: 'blob' });
@@ -48,4 +64,13 @@ export class ApiService {
     return `${this.apiUrl}/preview/${fileId}`; // Returns the full URL for the image
   }
 
+  register(user: { username: string; email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, user);
+  }
+
+  // Method to login a user
+  login(credentials: { username: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, credentials);
+  }
+  
 }

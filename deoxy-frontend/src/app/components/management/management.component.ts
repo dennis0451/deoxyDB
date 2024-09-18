@@ -8,14 +8,21 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
-
 import { ImagePreviewComponent } from '../image-preview/image-preview.component';
-
+import { AuthService, UserInfo } from '../../services/auth.service';
 
 @Component({
   selector: 'app-management',
   standalone: true,
-  imports: [MatTableModule, MatButtonModule, FormsModule, CommonModule, MatBottomSheetModule, MatButtonModule, MatDialogModule], // Add FormsModule for ngModel
+  imports: [
+    MatTableModule, 
+    MatButtonModule, 
+    FormsModule, 
+    CommonModule, 
+    MatBottomSheetModule, 
+    MatButtonModule, 
+    MatDialogModule
+  ], // Add FormsModule for ngModel
   templateUrl: './management.component.html',
   styleUrl: './management.component.css'
 })
@@ -23,14 +30,34 @@ export class ManagementComponent {
   displayedColumns: string[] = ['file_id', 'file_name', 'dna_sequence', 'actions'];
   dataSource: any[] = [];
   editingRows: { [key: number]: boolean } = {}; // Track which rows are being edited
+  user?: UserInfo;
 
-  constructor(private apiService: ApiService, private bottomSheet: MatBottomSheet,private dialog: MatDialog) {}
+  constructor(
+    private apiService: ApiService, 
+    private bottomSheet: MatBottomSheet,
+    private dialog: MatDialog,  
+    private authService: AuthService // Inject AuthService to get user data
+  ) {}
 
   ngOnInit() {
-    // Fetch data from the API
-    this.apiService.getDnaSequences().subscribe((data: any) => {
-      this.dataSource = data;
-    });
+    this.user = this.authService.getUserInfo(); // Get the user information
+    console.log('User info:', this.user);
+    if (this.user) {
+      this.loadUserData(this.user.id); // Pass the userId when loading data
+    }
+  }
+
+  loadUserData(userId: number) {
+    // Fetch data for the logged-in user based on userId
+    this.apiService.getDnaSequences(userId).subscribe(
+      (data: any) => {
+        this.dataSource = data;
+        console.log('DNA Sequences:', data);
+      },
+      (error) => {
+        console.error('Error fetching DNA sequences:', error);
+      }
+    );
   }
 
   // Edit a row (enable input fields)
@@ -52,6 +79,7 @@ export class ManagementComponent {
     window.location.href = downloadUrl;  // This will trigger the file download
   }
 
+  // Preview the image
   previewImage(fileId: number) {
     console.log('Previewing image with fileId:', fileId);
     

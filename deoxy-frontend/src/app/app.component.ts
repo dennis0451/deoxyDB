@@ -3,13 +3,14 @@ import { ApiService } from './api.service';
 import {NavComponent} from './components/nav/nav.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [NavComponent, CommonModule, RouterModule] // Add necessary imports if needed
+  imports: [NavComponent, CommonModule, RouterModule, CarouselModule] // Add necessary imports if needed
 })
 export class AppComponent implements OnInit {
   message: string = '';

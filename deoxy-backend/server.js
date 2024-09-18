@@ -5,12 +5,127 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const pool = require('./db'); // PostgreSQL pool connection
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
 const app = express();
 const port = 3000;
 
+// const cors = require('cors');
+
 app.use(cors());
+
 app.use(express.json()); // To parse incoming JSON requests
+
+// Secret key for signing JWTs
+const secretKey = 'your-secret-key'; // Replace with your own secret key
+
+// Registration Endpoint
+app.post('/api/register', async (req, res) => {
+  const { username, email, password } = req.body;
+
+  try {
+    // Check if the user already exists
+    const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (userExists.rows.length > 0) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Insert the new user into the database
+    const newUser = await pool.query(
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING user_id, username, email',
+      [username, email, hashedPassword]
+    );
+
+    // Create JWT Token
+    const token = jwt.sign({ userId: newUser.rows[0].user_id }, 'your_jwt_secret_key', {
+      expiresIn: '1h',
+    });
+
+    res.status(201).json({ token, user: newUser.rows[0] });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+
+// Login Endpoint
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+
+  // Check if the user exists
+  const query = 'SELECT * FROM users WHERE username = $1';
+  pool.query(query, [username])
+    .then(result => {
+      if (result.rows.length === 0) {
+        return res.status(401).json({ message: 'Invalid username or password' });
+      }
+
+      const user = result.rows[0];
+
+      // Compare the hashed password
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err) throw err;
+
+        if (isMatch) {
+          // Generate JWT token
+          const token = jwt.sign({ user_id: user.user_id, username: user.username }, secretKey, {
+            expiresIn: '1h', // Token expiration
+          });
+
+          // Return the token along with the user object
+          res.json({
+            token,
+            user: {
+              user_id: user.user_id,
+              username: user.username,
+              email: user.email,
+            },
+          });
+        } else {
+          res.status(401).json({ message: 'Invalid username or password' });
+        }
+      });
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'Server error' });
+    });
+});
+
+
+// Middleware to protect routes and extract user info
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  console.log('Authorization Header:', authHeader);
+
+  if (!authHeader) return res.status(401).json({ message: 'Access Denied' });
+
+  const token = authHeader.split(' ')[1];  // Extract the token part
+  console.log('Extracted Token:', token);
+
+  if (!token) return res.status(401).json({ message: 'Access Denied' });
+
+  jwt.verify(token, secretKey, (err, user) => {
+    if (err) {
+      console.log('Token verification error:', err);
+      return res.status(403).json({ message: 'Invalid Token' });
+    }
+    req.user = user;
+    next(); // Proceed to the next middleware
+  });
+}
+
+
+// Example of a protected route
+app.get('/api/protected', authenticateToken, (req, res) => {
+  res.json({ message: 'This is a protected route', user: req.user });
+});
+
 
 //Multer storage
 const storage = multer.diskStorage({
@@ -31,7 +146,10 @@ const upload = multer({ storage });
 app.post('/api/upload', upload.single('file'), (req, res) => {
   const filePath = req.file.path;
   const fileType = path.extname(req.file.originalname).toLowerCase();
-  const userId = 1; // Hardcoded user ID
+  
+  // Get the userId from formData
+  const userId = req.body.userId;  // Extract userId from form data
+  console.log('userId:', userId);
 
   // Insert media file information into the database
   const insertMediaFileQuery = `
@@ -39,7 +157,7 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     VALUES ($1, $2, $3, 'uploaded')
     RETURNING file_id;
   `;
-  const mediaFileValues = [userId, req.file.originalname, fileType]; // Use the original filename here
+  const mediaFileValues = [userId, req.file.originalname, fileType];
 
   pool.query(insertMediaFileQuery, mediaFileValues)
     .then((result) => {
@@ -113,6 +231,8 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
       res.status(500).send('Error saving media file to database');
     });
 });
+
+
 
 //Download DNA sequence as image
 app.get('/api/download/:fileId', (req, res) => {
@@ -259,7 +379,39 @@ function dnaToBinary(dnaSequence) {
 }
 
 //Get data to be displayed on table
+// app.get('/api/dnasequences', (req, res) => {
+//   const query = `
+//     SELECT 
+//       mediafile.file_id, 
+//       mediafile.file_name, 
+//       dnasequence.sequence_id, 
+//       SUBSTRING(dnasequence.dna_sequence, 1, 32) AS dna_sequence 
+//     FROM 
+//       mediafile 
+//     INNER JOIN 
+//       dnasequence 
+//     ON 
+//       mediafile.file_id = dnasequence.file_id;
+//   `;
+  
+//   pool.query(query)
+//     .then((result) => {
+//       res.json(result.rows);
+//     })
+//     .catch((error) => {
+//       console.error('Error fetching DNA sequences from database:', error);
+//       res.status(500).send('Error fetching DNA sequences from database');
+//     });
+// });
+
+// Using userId from query parameters
 app.get('/api/dnasequences', (req, res) => {
+  const userId = req.query.userId;  // Pass the userId in the query parameter ?userId=5
+
+  if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
   const query = `
     SELECT 
       mediafile.file_id, 
@@ -271,10 +423,11 @@ app.get('/api/dnasequences', (req, res) => {
     INNER JOIN 
       dnasequence 
     ON 
-      mediafile.file_id = dnasequence.file_id;
+      mediafile.file_id = dnasequence.file_id
+    WHERE mediafile.user_id = $1;
   `;
   
-  pool.query(query)
+  pool.query(query, [userId])
     .then((result) => {
       res.json(result.rows);
     })
@@ -283,6 +436,7 @@ app.get('/api/dnasequences', (req, res) => {
       res.status(500).send('Error fetching DNA sequences from database');
     });
 });
+
 
 //edit row
 app.put('/api/update/:fileId', (req, res) => {

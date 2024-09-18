@@ -10,4 +10,11 @@ import { ManagementComponent } from '../../components/management/management.comp
 })
 export class ManagementPageComponent {
 
+  constructor() {}
+
+  ngOnInit() {
+    console.log('Management page loaded');
+
+    
+  }
 }

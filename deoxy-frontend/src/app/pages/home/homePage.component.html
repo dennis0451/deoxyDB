@@ -1,18 +1,42 @@
 <div class="homepage-container">
-    <!-- Hero Section -->
-    <section class="hero">
-      <h1>Welcome to DeoxyDB Test</h1>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Welcome to DeoxyDB</h1>
       <p>Preserve your data for the future using advanced DNA sequence technology.</p>
       <button mat-raised-button color="primary" (click)="navigateTo('upload')">Upload Files</button>
-    </section>
-  
-    <div>
-      <h1>img</h1>
-      <img src="assets/test.jpeg" alt="">
     </div>
-    <!-- Features Section -->
-    <section class="features">
-      <h2>What You Can Do</h2>
+  </section>
+
+  <section class="carousel-section">
+    <h2>How It Works</h2>
+    <div class="carousel-container">
+      <img style="max-width: 400px;" src="assets/takeAphoto.webp" alt="Example Image" class="main-image">
+      <img style="max-width: 400px;" src="assets/pictureToBinary.webp" alt="Example Image" class="main-image">
+      <img style="max-width: 400px;" src="assets/binaryToDna.webp" alt="Example Image" class="main-image">
+      <img style="max-width: 400px;" src="assets/DnaToDb.webp" alt="Example Image" class="main-image">
+      <img style="max-width: 400px;" src="assets/database.JPG" alt="Example Image" class="main-image">
+
+
+    </div>
+  </section> 
+
+    <!-- Carousel Section -->
+    <!-- <section class="carousel-section">
+      <h2>Showcasing DNA Technology</h2>
+      <owl-carousel-o [options]="carouselOptions">
+        <ng-container *ngFor="let image of images">
+          <ng-template carouselSlide>
+            <img style="max-width: 300px;" [src]="image" class="carousel-img" />
+          </ng-template>
+        </ng-container>
+      </owl-carousel-o>
+    </section> -->
+
+  <!-- Features Section -->
+  <section class="features">
+    <h2>Explore DeoxyDB</h2>
+    <div class="features-grid">
       <div class="feature-card">
         <h3>Upload Your Files</h3>
         <p>Upload images and videos, convert them into DNA sequences for long-term storage.</p>
@@ -24,11 +48,10 @@
         <button mat-button color="accent" (click)="navigateTo('management')">Manage Files</button>
       </div>
       <div class="feature-card">
-        <h3>Preview Stored Files</h3>
-        <p>Preview the stored DNA sequences and regenerate the original files from the sequences.</p>
-        <button mat-button color="accent" (click)="navigateTo('preview')">Preview Files</button>
+        <h3>About DeoxyDB</h3>
+        <p>Learn more about the technology and the team behind DeoxyDB.</p>
+        <button mat-button color="accent" (click)="navigateTo('about')">About Us</button>
       </div>
-    </section>
-  </div>
-
-  
+    </div>
+  </section>
+</div>
