@@ -13,7 +13,12 @@ const port = 3000;
 
 // const cors = require('cors');
 
-app.use(cors());
+// server.js or app.js
+app.use(cors({
+  origin: 'http://localhost:4200', // Your Angular app's URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json()); // To parse incoming JSON requests
 
@@ -74,9 +79,13 @@ app.post('/api/login', (req, res) => {
 
         if (isMatch) {
           // Generate JWT token
-          const token = jwt.sign({ user_id: user.user_id, username: user.username }, secretKey, {
-            expiresIn: '1h', // Token expiration
-          });
+          // Example in login endpoint
+        const token = jwt.sign(
+  { user_id: user.user_id, username: user.username, email: user.email },
+  secretKey,
+  { expiresIn: '1h' }
+);
+
 
           // Return the token along with the user object
           res.json({
@@ -99,24 +108,43 @@ app.post('/api/login', (req, res) => {
 
 
 // Middleware to protect routes and extract user info
+// function authenticateToken(req, res, next) {
+//   const authHeader = req.headers['authorization'];
+//   console.log('Authorization Header:', authHeader);
+
+//   if (!authHeader) return res.status(401).json({ message: 'Access Denied' });
+
+//   const token = authHeader.split(' ')[1];  // Extract the token part
+//   console.log('Extracted Token:', token);
+
+//   if (!token) return res.status(401).json({ message: 'Access Denied' });
+
+//   jwt.verify(token, secretKey, (err, user) => {
+//     if (err) {
+//       console.log('Token verification error:', err);
+//       return res.status(403).json({ message: 'Invalid Token' });
+//     }
+//     req.user = user;
+//     next(); // Proceed to the next middleware
+//   });
+// }
+
+// server.js or app.js
+
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
-  console.log('Authorization Header:', authHeader);
 
-  if (!authHeader) return res.status(401).json({ message: 'Access Denied' });
+  if (!authHeader)
+    return res.status(401).json({ message: 'Access Denied: No Token Provided' });
 
-  const token = authHeader.split(' ')[1];  // Extract the token part
-  console.log('Extracted Token:', token);
-
-  if (!token) return res.status(401).json({ message: 'Access Denied' });
+  const token = authHeader.split(' ')[1];
 
   jwt.verify(token, secretKey, (err, user) => {
-    if (err) {
-      console.log('Token verification error:', err);
+    if (err)
       return res.status(403).json({ message: 'Invalid Token' });
-    }
-    req.user = user;
-    next(); // Proceed to the next middleware
+
+    req.user = user; // Attach user info to req.user
+    next();
   });
 }
 
@@ -143,14 +171,20 @@ const upload = multer({ storage });
 //file upload and processig
 
 // Handle file upload and processing
-app.post('/api/upload', upload.single('file'), (req, res) => {
+// app.post('/api/upload', upload.single('file'), (req, res) => {
+//   const filePath = req.file.path;
+//   const fileType = path.extname(req.file.originalname).toLowerCase();
+  
+//   // Get the userId from formData
+//   const userId = req.body.userId;  // Extract userId from form data
+//   console.log('userId:', userId);
+app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => {
   const filePath = req.file.path;
   const fileType = path.extname(req.file.originalname).toLowerCase();
-  
-  // Get the userId from formData
-  const userId = req.body.userId;  // Extract userId from form data
-  console.log('userId:', userId);
 
+  // Get the userId from req.user
+  const userId = req.user.user_id; // Extract userId from token
+  console.log('userId:', userId);
   // Insert media file information into the database
   const insertMediaFileQuery = `
     INSERT INTO mediafile (user_id, file_name, file_type, status)
@@ -405,8 +439,8 @@ function dnaToBinary(dnaSequence) {
 // });
 
 // Using userId from query parameters
-app.get('/api/dnasequences', (req, res) => {
-  const userId = req.query.userId;  // Pass the userId in the query parameter ?userId=5
+app.get('/api/dnasequences', authenticateToken, (req, res) => {
+  const userId = req.user.user_id;  // Extract the userId from the decoded token
 
   if (!userId) {
     return res.status(400).json({ message: 'User ID is required' });
@@ -436,7 +470,6 @@ app.get('/api/dnasequences', (req, res) => {
       res.status(500).send('Error fetching DNA sequences from database');
     });
 });
-
 
 //edit row
 app.put('/api/update/:fileId', (req, res) => {

@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
 import { CommonModule } from '@angular/common'; // Import CommonModule for *ngIf
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { ImagePreviewComponent } from '../image-preview/image-preview.component';
@@ -34,22 +33,17 @@ export class ManagementComponent {
 
   constructor(
     private apiService: ApiService, 
-    private bottomSheet: MatBottomSheet,
     private dialog: MatDialog,  
     private authService: AuthService // Inject AuthService to get user data
   ) {}
 
   ngOnInit() {
-    this.user = this.authService.getUserInfo(); // Get the user information
-    console.log('User info:', this.user);
-    if (this.user) {
-      this.loadUserData(this.user.id); // Pass the userId when loading data
-    }
+    this.loadUserData();
   }
 
-  loadUserData(userId: number) {
-    // Fetch data for the logged-in user based on userId
-    this.apiService.getDnaSequences(userId).subscribe(
+  loadUserData() {
+    // Fetch data for the logged-in user (handled by token in the backend)
+    this.apiService.getDnaSequences().subscribe(
       (data: any) => {
         this.dataSource = data;
         console.log('DNA Sequences:', data);

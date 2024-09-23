@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -47,11 +47,17 @@ export class ApiService {
 
   // Method to fetch DNA sequences
 // Method to fetch DNA sequences based on the userId
-getDnaSequences(userId: number): Observable<any[]> {
-  console.log('Fetching DNA sequences for user:', userId);
-  
-  // Pass the userId as a query parameter
-  return this.http.get<any[]>(`${this.apiUrl}/dnasequences?userId=${userId}`);
+getDnaSequences(): Observable<any[]> {
+  // Get the token from local storage
+  const token = localStorage.getItem('token');
+
+  // Include the token in the Authorization header
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+
+  // Pass the token via the header
+  return this.http.get<any[]>(`${this.apiUrl}/dnasequences`, { headers });
 }
 
   
