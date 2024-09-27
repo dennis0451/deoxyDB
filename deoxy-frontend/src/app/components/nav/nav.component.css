@@ -1,8 +1,24 @@
-.spacer {
-  flex: 1 1 auto;
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .app-name {
-  font-size: 20px;
+  font-size: 1.5rem;
   font-weight: bold;
+  color: white; /* Ensure it's readable against the primary color */
+}
+
+.spacer {
+  flex: 1;
+}
+
+.mat-button {
+  font-weight: bold;
+  color: white; /* Ensure the buttons are readable against the primary color */
+}
+
+.mat-icon {
+  margin-right: 8px; /* Space between icon and text */
 }

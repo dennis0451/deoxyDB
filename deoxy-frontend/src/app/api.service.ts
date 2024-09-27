@@ -78,5 +78,22 @@ getDnaSequences(): Observable<any[]> {
   login(credentials: { username: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials);
   }
+  downloadAllSequences(): Observable<Blob> {
+    // Get the token from local storage
+    const token = localStorage.getItem('token');
+
+    // Include the token in the headers
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get(`${this.apiUrl}/download-all`, { headers, responseType: 'blob' });
+  }
   
+
+  // In your api.service.ts
+deleteDnaSequence(fileId: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/delete/${fileId}`);
+}
+
 }

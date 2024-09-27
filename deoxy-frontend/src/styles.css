@@ -5,3 +5,21 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+    background-image: url('/assets/background10.jpg');
+    background-size: cover; /* Ensure the image covers the entire screen */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+    background-position: center center; /* Center the image */
+    background-attachment: fixed; /* Keep the background fixed on scroll */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif; /* Adjust the font as needed */
+  }
+  
+  /* Additional styling to ensure all content is above the background */
+  app-root {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  

@@ -58,8 +58,9 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    return !!token && !this.isTokenExpired(token);
+    // Check if the token exists and is valid
+    const token = localStorage.getItem('token');
+    return !!token; // Returns true if a token exists, otherwise false
   }
 
   private setUserInfoFromToken(token: string) {

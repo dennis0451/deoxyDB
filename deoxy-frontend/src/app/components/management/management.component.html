@@ -1,3 +1,7 @@
+<div class="table-actions">
+  <button mat-raised-button color="primary" (click)="downloadAllFiles()">Download All</button>
+</div>
+
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   
   <!-- File ID Column (Not Editable) -->
@@ -27,12 +31,24 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Actions </th>
     <td mat-cell *matCellDef="let row">
-      <button mat-button color="primary" *ngIf="!editingRows[row.file_id]" (click)="editRow(row.file_id)">Edit</button>
-      <button mat-button color="accent" *ngIf="editingRows[row.file_id]" (click)="saveRow(row)">Save</button>
-      <button mat-button color="primary" (click)="previewImage(row.file_id)">Preview</button>
-      <button mat-button color="primary" (click)="downloadFile(row.file_id)">Download</button>
+      <button mat-icon-button color="primary" *ngIf="!editingRows[row.file_id]" (click)="editRow(row.file_id)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="accent" *ngIf="editingRows[row.file_id]" (click)="saveRow(row)">
+        <mat-icon>save</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" (click)="previewImage(row.file_id)">
+        <mat-icon>visibility</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" (click)="downloadFile(row.file_id)">
+        <mat-icon>cloud_download</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteRow(row.file_id)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </td>
   </ng-container>
+  
 
   <!-- Header and Row Declarations -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

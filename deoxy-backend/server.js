@@ -411,32 +411,8 @@ function dnaToBinary(dnaSequence) {
 
   return buffer;
 }
+ 
 
-//Get data to be displayed on table
-// app.get('/api/dnasequences', (req, res) => {
-//   const query = `
-//     SELECT 
-//       mediafile.file_id, 
-//       mediafile.file_name, 
-//       dnasequence.sequence_id, 
-//       SUBSTRING(dnasequence.dna_sequence, 1, 32) AS dna_sequence 
-//     FROM 
-//       mediafile 
-//     INNER JOIN 
-//       dnasequence 
-//     ON 
-//       mediafile.file_id = dnasequence.file_id;
-//   `;
-  
-//   pool.query(query)
-//     .then((result) => {
-//       res.json(result.rows);
-//     })
-//     .catch((error) => {
-//       console.error('Error fetching DNA sequences from database:', error);
-//       res.status(500).send('Error fetching DNA sequences from database');
-//     });
-// });
 
 // Using userId from query parameters
 app.get('/api/dnasequences', authenticateToken, (req, res) => {
@@ -547,7 +523,74 @@ app.get('/api/preview/:fileId', (req, res) => {
     });
 });
 
+app.get('/api/download-all', authenticateToken, (req, res) => {
+  const userId = req.user.user_id;  // Extract userId from the token
 
+  // Query the database for all DNA sequences belonging to the user
+  const query = `
+    SELECT mediafile.file_name, dnasequence.dna_sequence
+    FROM mediafile
+    INNER JOIN dnasequence ON mediafile.file_id = dnasequence.file_id
+    WHERE mediafile.user_id = $1;
+  `;
+
+  pool.query(query, [userId])
+    .then(result => {
+      if (result.rows.length > 0) {
+        // Generate FASTA content
+        let fastaContent = '';
+        result.rows.forEach(row => {
+          fastaContent += `>${row.file_name}\n${row.dna_sequence.match(/.{1,80}/g).join('\n')}\n`;
+        });
+
+        // Create a temporary file to write the FASTA content to
+        const filePath = path.join(__dirname, 'temp', `sequences_${userId}.fasta`);
+        fs.writeFileSync(filePath, fastaContent);
+
+        // Send the file back as a response
+        res.download(filePath, 'sequences.fasta', (err) => {
+          if (err) {
+            console.error('Error downloading the file:', err);
+            return res.status(500).send('File download error');
+          }
+
+          // Clean up the temporary file
+          fs.unlinkSync(filePath);
+        });
+      } else {
+        res.status(404).send('No DNA sequences found for the user');
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching DNA sequences:', error);
+      res.status(500).send('Error fetching DNA sequences');
+    });
+});
+
+app.delete('/api/delete/:fileId', async (req, res) => {
+  const fileId = req.params.fileId;
+
+  try {
+    // Start a transaction
+    await pool.query('BEGIN');
+
+    // Delete from the dnasequence table
+    await pool.query('DELETE FROM dnasequence WHERE file_id = $1', [fileId]);
+
+    // Delete from the mediafile table
+    await pool.query('DELETE FROM mediafile WHERE file_id = $1', [fileId]);
+
+    // Commit the transaction
+    await pool.query('COMMIT');
+
+    res.json({ message: 'File deleted successfully' });
+  } catch (error) {
+    // Rollback the transaction in case of error
+    await pool.query('ROLLBACK');
+    console.error('Error deleting file from database:', error);
+    res.status(500).json({ error: 'Failed to delete file' });
+  }
+});
 
 
 app.listen(port, () => {

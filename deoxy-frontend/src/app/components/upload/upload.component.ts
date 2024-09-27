@@ -1,102 +1,86 @@
-// import { Component } from '@angular/core';
-// import { FileService } from '../../services/file.service'; // Use FileService
-// import { MatButtonModule } from '@angular/material/button';
-// import { MatToolbarModule } from '@angular/material/toolbar';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { CommonModule } from '@angular/common';
-// import { AuthService } from '../../services/auth.service'; // Import AuthService
-
-// @Component({
-//   selector: 'app-upload',
-//   standalone: true,
-//   templateUrl: './upload.component.html',
-//   imports: [MatButtonModule, MatToolbarModule, MatInputModule, MatFormFieldModule, CommonModule], // Ensure all modules are included
-// })
-// export class UploadComponent {
-//   selectedFiles!: FileList;
-//   dnaSequence!: string;
-//   userId!: number; // Store userId
-
-//   constructor(private fileService: FileService, private authService: AuthService) {} // Inject AuthService
-
-//   ngOnInit() {
-//     // Retrieve user info from AuthService
-//     const userInfo = this.authService.getUserInfo();
-//     if (userInfo) {
-//       this.userId = userInfo.id; // Assuming the id is stored in userInfo object
-//     } else {
-//       console.error('User is not logged in');
-//     }
-//   }
-
-//   onFileSelected(event: any) {
-//     this.selectedFiles = event.target.files;
-//   }
-
-//   onSubmit(event: Event) {
-//     event.preventDefault();
-
-//     if (this.selectedFiles && this.userId) {
-//       this.fileService.uploadFiles(this.selectedFiles, this.userId).subscribe(response => {
-//         console.log('DNA Sequence:', response.dnaSequence); // Log the DNA sequence from the backend
-//         // Display the first 52 characters of the DNA sequence
-//         // this.dnaSequence = response.dnaSequence.substring(0, 52);
-//       }, error => {
-//         console.error('Upload failed:', error);
-//       });
-//     } else {
-//       console.error('No files selected or user is not logged in');
-//     }
-//   }
-// }
-// upload.component.ts
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FileService } from '../../services/file.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
+import { UploadConfirmationComponent } from '../upload-confirmation/upload-confirmation.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-upload',
   standalone: true,
   templateUrl: './upload.component.html',
+  styleUrls: ['./upload.component.css'],
   imports: [
     MatButtonModule,
     MatToolbarModule,
     MatInputModule,
     MatFormFieldModule,
-    CommonModule
-  ]
+    CommonModule,
+    UploadConfirmationComponent,
+    MatProgressSpinnerModule
+  ],
+  // encapsulation: ViewEncapsulation.None,
 })
 export class UploadComponent {
   selectedFiles!: FileList;
+  selectedFileName: string = '';  // Added property to hold the selected file name
   dnaSequence!: string;
+  isUploading: boolean = false;  // Tracks the upload state
+
 
   constructor(private fileService: FileService) {}
 
   onFileSelected(event: any) {
     this.selectedFiles = event.target.files;
+    if (this.selectedFiles && this.selectedFiles.length > 0) {
+      this.selectedFileName = this.selectedFiles[0].name;  // Set the selected file name
+    }
   }
 
   onSubmit(event: Event) {
     event.preventDefault();
+    this.dnaSequence = '';
+    this.isUploading = true;  // Show spinner when upload starts
 
     if (this.selectedFiles) {
       this.fileService.uploadFiles(this.selectedFiles).subscribe(
         response => {
-          console.log('DNA Sequence:', response.dnaSequence);
-          // this.dnaSequence = response.dnaSequence.substring(0, 52);
+          const dnaSequence = (response.dnaSequence as unknown as { dna_sequence: string }).dna_sequence;
+          if (dnaSequence) {
+            this.dnaSequence = dnaSequence.substring(0, 63);
+            console.log('DNA Sequence set:', this.dnaSequence);  // Log the value
+            this.isUploading = false;  // Hide spinner when upload is complete
+
+            this.resetForm();  // Reset form after successful upload
+          } else {
+            this.isUploading = false;  // Hide spinner when upload is complete
+
+            console.error('DNA sequence not found in the response');
+          }
         },
         error => {
           console.error('Upload failed:', error);
+          this.isUploading = false;  // Hide spinner when upload is complete
+
         }
       );
     } else {
       console.error('No files selected');
+      this.isUploading = false;  // Hide spinner when upload is complete
+
+    }
+  }
+
+  resetForm() {
+    this.selectedFiles = undefined as any;
+    this.selectedFileName = '';  // Clear the file name when the form is reset
+    const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';  // Clear the file input
     }
   }
 }

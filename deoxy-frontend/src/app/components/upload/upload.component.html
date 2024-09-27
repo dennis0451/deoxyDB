@@ -1,23 +1,39 @@
-<h2>Upload Files</h2>
-<section>
-  <div class="example-label">Raised</div>
-  <div class="example-button-row">
-    <button mat-raised-button>Basic</button>
-    <button mat-raised-button disabled>Disabled</button>
-    <a mat-raised-button href="https://www.google.com/" target="_blank">Link</a>
-  </div>
-</section>
-<form (submit)="onSubmit($event)">
-  <div class="file-input-container">
-    <label for="file-upload" class="custom-file-label">Select Files</label>
-    <input id="file-upload" class="upload-button" type="file" (change)="onFileSelected($event)">
-  </div>
-  <!-- <button mat-raised-button>Basi</button> -->
+<!-- <h2 class="upload-title">Upload Files</h2>
+<div class="upload-form">
+
+  <form (submit)="onSubmit($event)" >
+    <div class="file-upload-container">
+     -->
+        <!-- label or some sort of tag to display the file name -->
+
+<!-- 
+        <label for="file-upload" class="custom-file-label">Select Files</label>
+        <input id="file-upload" class="upload-button" type="file" (change)="onFileSelected($event)">
   
-  <button mat-raised-button color="primary" type="submit">Upload</button>
-</form>
-<!-- Display the first 26 characters of the DNA sequence -->
-<div *ngIf="dnaSequence">
-  <h3>First 26 Characters of DNA Sequence:</h3>
-  <p>{{ dnaSequence }}</p>
+        <button mat-raised-button color="primary" type="submit">Upload</button>
+    </div>
+    </form>
+  
+  <app-upload-confirmation *ngIf="dnaSequence" [dnaSequence]="dnaSequence"></app-upload-confirmation>
+</div> -->
+<h2 class="upload-title">Upload Files</h2>
+<div class="upload-form">
+  <form (submit)="onSubmit($event)">
+    <div class="file-upload-container">
+        <!-- Label to display the file name -->
+        <label for="file-upload" class="custom-file-label">
+          {{ selectedFileName || 'Select Files' }}
+        </label>
+        <input id="file-upload" class="upload-button" type="file" (change)="onFileSelected($event)">
+
+        <button mat-raised-button color="primary" type="submit">Upload</button>
+    </div>
+  </form>
+  <!-- Mat Progress Spinner -->
+  <div *ngIf="isUploading" class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+
+  <app-upload-confirmation *ngIf="dnaSequence" [dnaSequence]="dnaSequence"></app-upload-confirmation>
 </div>

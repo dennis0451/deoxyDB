@@ -1,6 +1,6 @@
 <div class="auth-container">
     <h2>{{ isLoginMode ? 'Login' : 'Register' }}</h2>
-  
+
     <form (ngSubmit)="onSubmit()">
       <!-- Username Field -->
       <mat-form-field appearance="fill">
@@ -29,11 +29,16 @@
       <!-- Error message -->
       <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   
-      <!-- Submit Button -->
-      <button mat-raised-button color="primary" type="submit">{{ isLoginMode ? 'Login' : 'Register' }}</button>
-  
-      <!-- Toggle Button -->
-      <button mat-button (click)="toggleAuthMode()">{{ isLoginMode ? 'Need an account? Register' : 'Already have an account? Login' }}</button>
+      <div class="auth-buttons">
+
+        <!-- Submit Button -->
+        <button mat-raised-button color="primary" type="submit">{{ isLoginMode ? 'Login' : 'Register' }}</button>
+        
+        <!-- Toggle Button -->
+        <button mat-button type="button" (click)="toggleAuthMode()">
+          {{ isLoginMode ? 'Register' : 'Back to Login' }}
+        </button>
+      </div>
     </form>
   </div>
   

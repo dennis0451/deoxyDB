@@ -9,6 +9,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { ImagePreviewComponent } from '../image-preview/image-preview.component';
 import { AuthService, UserInfo } from '../../services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
+
+
 
 @Component({
   selector: 'app-management',
@@ -20,7 +23,8 @@ import { AuthService, UserInfo } from '../../services/auth.service';
     CommonModule, 
     MatBottomSheetModule, 
     MatButtonModule, 
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule
   ], // Add FormsModule for ngModel
   templateUrl: './management.component.html',
   styleUrl: './management.component.css'
@@ -82,4 +86,33 @@ export class ManagementComponent {
       width: '500px' // Optional: set the size of the dialog
     });
   }
+
+  downloadAllFiles() {
+    this.apiService.downloadAllSequences().subscribe(
+      (response: Blob) => {
+        // Create a link element and trigger the download
+        const downloadLink = document.createElement('a');
+        const url = window.URL.createObjectURL(response);
+        downloadLink.href = url;
+        downloadLink.download = 'sequences.fasta';  // Name the file
+        downloadLink.click();
+        window.URL.revokeObjectURL(url);  // Clean up the URL object
+      },
+      error => {
+        console.error('Error downloading FASTA file:', error);
+      }
+    );
+  }
+  
+    // Delete a row
+    deleteRow(fileId: number) {
+      if (confirm('Are you sure you want to delete this file?')) {
+        this.apiService.deleteDnaSequence(fileId).subscribe(response => {
+          console.log('File deleted successfully', response);
+          this.loadUserData();  // Reload the data after deletion
+        }, error => {
+          console.error('Error deleting file:', error);
+        });
+      }
+    }
 }

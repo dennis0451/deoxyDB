@@ -1,19 +1,26 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="toolbar">
+  <!-- App Name on the left -->
   <span class="app-name">DeoxyDb</span>
 
+  <!-- Spacer to push the menu to the right -->
   <span class="spacer"></span>
 
-  <!-- Menu for navigating between components -->
-  <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+  <!-- Menu for navigating between components (visible when logged in) -->
+  <button mat-button *ngIf="checkIsLoggedIn()" [matMenuTriggerFor]="menu">
+    <mat-icon>menu</mat-icon> Menu
+  </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="navigateTo('home')">Home</button>
-    <button mat-menu-item (click)="navigateTo('upload')">Upload</button>
-    <button mat-menu-item (click)="navigateTo('management')">Management</button>
+    <button mat-menu-item (click)="navigateTo('home')">
+      <mat-icon>home</mat-icon> Home
+    </button>
+    <button mat-menu-item (click)="navigateTo('upload')">
+      <mat-icon>cloud_upload</mat-icon> Upload
+    </button>
+    <button mat-menu-item (click)="navigateTo('management')">
+      <mat-icon>manage_accounts</mat-icon> Management
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon> Logout
+    </button>
   </mat-menu>
-
-  <!-- Spacer to push logout button to the right -->
-  <span class="spacer"></span>
-
-  <!-- Logout button -->
-  <button mat-button (click)="logout()">Logout</button>
 </mat-toolbar>

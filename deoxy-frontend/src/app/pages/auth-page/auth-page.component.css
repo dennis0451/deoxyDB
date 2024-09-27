@@ -1,11 +1,76 @@
 .auth-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    text-align: center;
-  }
+  width: 100%;
+  max-width: 400px;
+  margin: 50px auto 0; /* Center the container with a top margin */
+  text-align: center;
+  border: 1pt solid #e0e0e0; /* Light gray border */
+  border-radius: 8px; /* Slightly rounded corners */
+  padding: 20px; /* Add some padding inside the container */
+  background-color: #ffffff; /* White background for the container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
   
   button {
     margin-top: 20px;
+  }
+  
+  /* .auth-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    margin-bottom: 10px;
+  } */
+  .error-message {
+    color: #D8000C; /* Bright red text */
+    background-color: #FFBABA; /* Light red background */
+    border: 1px solid #D8000C; /* Red border */
+    border-radius: 4px; /* Rounded corners */
+    font-weight: bold; /* Bold text */
+    text-align: center; /* Center the text */
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .auth-buttons button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    margin-top: 10px;
+    padding: 12px 20px;
+    border-radius: 25px; /* Rounded corners */
+    background-color: #3f51b5; /* Material Design Indigo */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .auth-buttons button:hover {
+    background-color: #303f9f; /* Darker shade on hover */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
+  }
+  
+  .auth-buttons button[type="submit"] {
+    background-color: #4caf50; /* Material Design Green */
+  }
+  
+  .auth-buttons button[type="submit"]:hover {
+    background-color: #388e3c; /* Darker green on hover */
+  }
+  
+  .auth-buttons button[type="button"] {
+    background-color: #f44336; /* Material Design Red */
+  }
+  
+  .auth-buttons button[type="button"]:hover {
+    background-color: #d32f2f; /* Darker red on hover */
   }
   

@@ -27,11 +27,31 @@ export class AuthPageComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  ngOnInit() {
+    console.log('is logged in?', this.isLoginMode);
+  }
+    
   toggleAuthMode() {
     this.isLoginMode = !this.isLoginMode;
+  
+    // Clear or reset form fields as necessary when switching modes
+    if (this.isLoginMode) {
+      this.confirmPassword = '';
+      this.email = '';
+      this.errorMessage = '';
+    } else {
+      this.password = '';
+      this.errorMessage = '';
+    }
   }
+  
 
   onSubmit() {
+    if (!this.username || !this.password || (!this.isLoginMode && (!this.email || !this.confirmPassword))) {
+      this.errorMessage = 'Please fill out all fields.';
+      return;
+    }
+
     if (this.isLoginMode) {
       this.login();
     } else {
@@ -62,6 +82,7 @@ export class AuthPageComponent {
 
     this.authService.register(user).subscribe(
       (response) => {
+        this.errorMessage = '';  // Clear any error message
         this.isLoginMode = true; // Switch to login after successful registration
       },
       (error) => {
