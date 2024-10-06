@@ -12,11 +12,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; /
 })
 export class ImagePreviewComponent {
   imageUrl: string | null = null;
+  imageTitle: string = ''; // Added property to hold the image title
   loading: boolean = true; // Boolean to track the loading state
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { fileId: number }) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { fileId: number, fileName: string }) {
     // Set the image URL from the provided data
     this.imageUrl = `http://localhost:3000/api/preview/${data.fileId}`;
+    this.imageTitle = data.fileName; // Set the image title from the provided data
   }
 
   // Called when the image finishes loading

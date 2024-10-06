@@ -1,0 +1,24 @@
+.table-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  
+  .download-all-button {
+    background-color: #fff127; /* A bold, attention-grabbing color */
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+  
+  .download-all-button mat-icon {
+    margin-right: 8px;
+  }
+  
+  .download-all-button:hover {
+    background-color: #ffd900; /* Darken on hover */
+  }
+  

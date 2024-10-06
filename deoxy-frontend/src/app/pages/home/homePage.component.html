@@ -1,56 +1,40 @@
 <div class="homepage-container">
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-content">
+  <!-- Canvas Background Section -->
+  <section class="canvas-background">
+    <canvas id="canvas-animation"></canvas>
+    <div class="canvas-overlay">
       <h1>Welcome to DeoxyDB</h1>
-      <p>Preserve your data for the future using advanced DNA sequence technology.</p>
-      <button mat-raised-button color="primary" (click)="navigateTo('upload')">Upload Files</button>
+      <p>Preserve your data for the future using advanced DNA sequencing technology.</p>
     </div>
   </section>
-
-  <section class="carousel-section">
-    <h2>How It Works</h2>
-    <div class="carousel-container">
-      <img style="max-width: 400px;" src="assets/takeAphoto.webp" alt="Example Image" class="main-image">
-      <img style="max-width: 400px;" src="assets/pictureToBinary.webp" alt="Example Image" class="main-image">
-      <img style="max-width: 400px;" src="assets/binaryToDna.webp" alt="Example Image" class="main-image">
-      <img style="max-width: 400px;" src="assets/DnaToDb.webp" alt="Example Image" class="main-image">
-      <img style="max-width: 400px;" src="assets/database.JPG" alt="Example Image" class="main-image">
-
-
-    </div>
-  </section> 
-
-    <!-- Carousel Section -->
-    <!-- <section class="carousel-section">
-      <h2>Showcasing DNA Technology</h2>
-      <owl-carousel-o [options]="carouselOptions">
-        <ng-container *ngFor="let image of images">
-          <ng-template carouselSlide>
-            <img style="max-width: 300px;" [src]="image" class="carousel-img" />
-          </ng-template>
-        </ng-container>
-      </owl-carousel-o>
-    </section> -->
 
   <!-- Features Section -->
   <section class="features">
     <h2>Explore DeoxyDB</h2>
     <div class="features-grid">
       <div class="feature-card">
+        <div class="feature-icon">
+          <mat-icon>cloud_upload</mat-icon>
+        </div>
         <h3>Upload Your Files</h3>
-        <p>Upload images and videos, convert them into DNA sequences for long-term storage.</p>
-        <button mat-button color="accent" (click)="navigateTo('upload')">Start Uploading</button>
+        <p>Upload images and convert them into DNA sequences for long-term storage.</p>
+        <label class="custom-button" (click)="navigateTo('upload')">Start Uploading</label>
       </div>
       <div class="feature-card">
+        <div class="feature-icon">
+          <mat-icon>manage_accounts</mat-icon>
+        </div>
         <h3>Manage Your Files</h3>
         <p>View and manage the DNA sequences and their corresponding files.</p>
-        <button mat-button color="accent" (click)="navigateTo('management')">Manage Files</button>
+        <label class="custom-button" (click)="navigateTo('management')">Manage Files</label>
       </div>
       <div class="feature-card">
+        <div class="feature-icon">
+          <mat-icon>info</mat-icon>
+        </div>
         <h3>About DeoxyDB</h3>
         <p>Learn more about the technology and the team behind DeoxyDB.</p>
-        <button mat-button color="accent" (click)="navigateTo('about')">About Us</button>
+        <label class="custom-button" (click)="navigateTo('about')">About Us</label>
       </div>
     </div>
   </section>

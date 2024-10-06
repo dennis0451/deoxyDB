@@ -1,22 +1,14 @@
-<!-- <h2 class="upload-title">Upload Files</h2>
-<div class="upload-form">
-
-  <form (submit)="onSubmit($event)" >
-    <div class="file-upload-container">
-     -->
-        <!-- label or some sort of tag to display the file name -->
-
-<!-- 
-        <label for="file-upload" class="custom-file-label">Select Files</label>
-        <input id="file-upload" class="upload-button" type="file" (change)="onFileSelected($event)">
-  
-        <button mat-raised-button color="primary" type="submit">Upload</button>
-    </div>
-    </form>
-  
-  <app-upload-confirmation *ngIf="dnaSequence" [dnaSequence]="dnaSequence"></app-upload-confirmation>
-</div> -->
 <h2 class="upload-title">Upload Files</h2>
+<!-- instructions on uploading in steps -->
+<div class="upload-instructions">
+  <h3>Instructions:</h3>
+  <ol>
+    <li>Click on the "Select Files" button to choose the files you want to upload.</li>
+    <li>Click on the "Upload" button to start the upload process.</li>
+    <li>Wait for the upload to complete.</li>
+    <li>Once the upload is complete, you will see a confirmation message with the first 64 characters of the DNA sequence.</li>
+  </ol>
+ 
 <div class="upload-form">
   <form (submit)="onSubmit($event)">
     <div class="file-upload-container">
@@ -36,4 +28,8 @@
 
 
   <app-upload-confirmation *ngIf="dnaSequence" [dnaSequence]="dnaSequence"></app-upload-confirmation>
+
+  <div *ngIf="dnaSequence" class="redirect-button-container">
+    <button mat-raised-button color="accent" (click)="navigateToManagement()">Go to Management</button>
+  </div>
 </div>

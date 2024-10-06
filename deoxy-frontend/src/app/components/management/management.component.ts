@@ -78,12 +78,14 @@ export class ManagementComponent {
   }
 
   // Preview the image
-  previewImage(fileId: number) {
+  previewImage(fileId: number, fileName: string) {
     console.log('Previewing image with fileId:', fileId);
+    console.log('File name:', fileName);
+    
     
     this.dialog.open(ImagePreviewComponent, {
-      data: { fileId }, // Pass the fileId to the dialog
-      width: '500px' // Optional: set the size of the dialog
+      data: { fileId,fileName }, // Pass the fileId to the dialog
+      width: '600px' // Optional: set the size of the dialog
     });
   }
 

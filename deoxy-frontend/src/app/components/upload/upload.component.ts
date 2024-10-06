@@ -7,6 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { UploadConfirmationComponent } from '../upload-confirmation/upload-confirmation.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
+
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -32,7 +34,7 @@ export class UploadComponent {
   isUploading: boolean = false;  // Tracks the upload state
 
 
-  constructor(private fileService: FileService) {}
+  constructor(private fileService: FileService, private router: Router) {}
 
   onFileSelected(event: any) {
     this.selectedFiles = event.target.files;
@@ -52,25 +54,25 @@ export class UploadComponent {
           const dnaSequence = (response.dnaSequence as unknown as { dna_sequence: string }).dna_sequence;
           if (dnaSequence) {
             this.dnaSequence = dnaSequence.substring(0, 63);
-            console.log('DNA Sequence set:', this.dnaSequence);  // Log the value
+            console.log('DNA Sequence:', dnaSequence);  // Log the value
             this.isUploading = false;  // Hide spinner when upload is complete
 
             this.resetForm();  // Reset form after successful upload
           } else {
-            this.isUploading = false;  // Hide spinner when upload is complete
+            this.isUploading = false;  
 
             console.error('DNA sequence not found in the response');
           }
         },
         error => {
           console.error('Upload failed:', error);
-          this.isUploading = false;  // Hide spinner when upload is complete
+          this.isUploading = false;  
 
         }
       );
     } else {
       console.error('No files selected');
-      this.isUploading = false;  // Hide spinner when upload is complete
+      this.isUploading = false;  
 
     }
   }
@@ -82,5 +84,8 @@ export class UploadComponent {
     if (fileInput) {
       fileInput.value = '';  // Clear the file input
     }
+  }
+  navigateToManagement() {
+    this.router.navigate(['/management']);
   }
 }

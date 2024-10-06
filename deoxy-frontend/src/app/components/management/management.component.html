@@ -1,5 +1,8 @@
 <div class="table-actions">
-  <button mat-raised-button color="primary" (click)="downloadAllFiles()">Download All</button>
+  <button mat-raised-button class="download-all-button" color="accent" (click)="downloadAllFiles()">
+    <mat-icon>cloud_download</mat-icon>
+    Download All
+  </button>
 </div>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -37,7 +40,7 @@
       <button mat-icon-button color="accent" *ngIf="editingRows[row.file_id]" (click)="saveRow(row)">
         <mat-icon>save</mat-icon>
       </button>
-      <button mat-icon-button color="primary" (click)="previewImage(row.file_id)">
+      <button mat-icon-button color="primary" (click)="previewImage(row.file_id, row.file_name)">
         <mat-icon>visibility</mat-icon>
       </button>
       <button mat-icon-button color="primary" (click)="downloadFile(row.file_id)">

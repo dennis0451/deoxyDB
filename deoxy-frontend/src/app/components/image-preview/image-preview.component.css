@@ -1,0 +1,11 @@
+.image-preview{
+    background-color: rgba(221, 221, 221, 0.8);
+
+}
+.image-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    margin-bottom: 20px;
+}

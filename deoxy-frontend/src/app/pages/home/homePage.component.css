@@ -1,96 +1,142 @@
-/* General styles */
-.homepage-container {
+/* Canvas Background Section */
+.canvas-background {
+  position: relative;
+  height: 55vh;
+  overflow: hidden;
+  color: rgb(0, 0, 0);
+}
+
+#canvas-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
+  height: 100%;
+  z-index: -1;
 }
 
-/* Hero section */
-.hero {
-  background: linear-gradient(to right, #6a11cb, #2575fc);
-  color: white;
+.canvas-overlay {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
   text-align: center;
-  padding: 100px 0;
 }
 
-.hero h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
-}
-
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 40px;
-}
-
-.hero-content {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.hero button {
-  font-size: 1.1rem;
-  padding: 10px 30px;
-}
-
-/* Carousel section */
-.carousel-section {
-  text-align: center;
-  padding: 50px 0;
-}
-
-.carousel-container {
+/* Add background and padding to the text elements */
+.canvas-overlay h1,
+.canvas-overlay p {
+  background-color: rgba(255, 255, 255, 0.8); /* Light gray background with 80% opacity */
+  padding: 15px 30px;
+  border-radius: 8px;
   max-width: 80%;
-display: flex;}
-
-.main-image {
-  width: 100%;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 10px auto;
 }
 
 /* Features section */
 .features {
   background: #f9f9f9;
-  padding: 50px 20px;
+  padding: 60px 20px;
   text-align: center;
 }
 
+
 .features h2 {
-  margin-bottom: 40px;
-  font-size: 2rem;
+  margin-bottom: 50px;
+  font-size: 2.5rem;
+  color: #333;
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
   justify-items: center;
 }
 
 .feature-card {
   background-color: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 300px;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
 .feature-card h3 {
   margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #333;
 }
 
-.feature-card button {
+.feature-card p {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #666;
+}
+
+/* .feature-card button {
   margin-top: 15px;
+} */
+
+.feature-card .feature-icon {
+  font-size: 3rem;
+  color: #2575fc;
+  margin-bottom: 15px;
+}
+/* Custom Button Styles */
+.custom-button {
+  /* display: inline-block; */
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+  color: white;
+  border-radius: 50px;
+  padding: 10px 30px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 15px;
+  /* max-width: 100%; */
 }
 
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 2.2rem;
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
+.custom-button:hover {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
 }
+
+.custom-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+h1 {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 18px;
+  color: #333;
+  /* margin-top: 10px; */
+}
+p {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  margin-top: 10px;
+}
+

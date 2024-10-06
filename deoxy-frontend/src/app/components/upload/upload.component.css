@@ -4,6 +4,7 @@
   text-align: center;
   margin-bottom: 20px;
   color: #333;
+  margin-top: 10px;
 }
 
 .upload-form {
@@ -56,4 +57,39 @@
   display: flex;
   justify-content: center;
   margin-top: 20px;
+}
+/* Instructions Styling */
+.upload-instructions {
+  background-color: #f1f1f1; /* Light gray background */
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.upload-instructions h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #333;
+}
+
+.upload-instructions ol {
+  margin: 0;
+  padding-left: 20px; /* Indent the list */
+  list-style: decimal; /* Ordered list with numbers */
+}
+
+.upload-instructions li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #555; /* Medium gray text for better readability */
+}
+.redirect-button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.redirect-button-container button {
+  padding: 10px 20px;
+  font-size: 14px;
 }
